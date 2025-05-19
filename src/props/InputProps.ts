@@ -7,5 +7,7 @@ export type InputProps = ComponentProps<typeof InputField> & {
   errorMessage?: string | null
   isInvalid?: boolean
   isReadOnly?: boolean
+  secureTextEntry?: boolean
+  eye?: boolean
   variant?: 'text' | 'password' | 'textarea'
 }

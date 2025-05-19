@@ -12,4 +12,5 @@ export interface buttonProps {
   icon?: 'pencil' | 'plus' | 'whatsapp' | 'trash' | 'power' | 'tag';
   isLoading?: boolean;
   variant?: 'blue' | 'black' | 'gray';
+  onPress?: () => void;
 }

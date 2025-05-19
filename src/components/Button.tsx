@@ -11,7 +11,7 @@ import { config } from '../../config/gluestack-ui.config'
 import { buttonProps } from 'src/props/ButtonProps'
 
 
-export function Button({title, isLoading = false, icon, variant = "blue", ...props}: buttonProps) {
+export function Button({title, isLoading = false, icon, variant = "blue", onPress, ...props}: buttonProps) {
   const textcolor = variant === 'blue' || variant === 'black' ? config.tokens.colors.gray7 : config.tokens.colors.gray2
   
   return (
@@ -23,6 +23,7 @@ export function Button({title, isLoading = false, icon, variant = "blue", ...pro
       borderRadius="$md"
       $active-bg={variant === 'blue' ? '$blue  ' : variant === 'black' ? '$gray2' : '$gray6'}
       disabled={isLoading}
+      onPress={onPress}
       {...props}     
     >
       {isLoading ? (
