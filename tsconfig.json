@@ -7,6 +7,9 @@
       "@dtos/*": [
         "src/dtos/*"
       ],
+      "@props/*": [
+        "./src/props/*"
+      ],
       "@assets/*": [
         "./src/assets/*"
       ],

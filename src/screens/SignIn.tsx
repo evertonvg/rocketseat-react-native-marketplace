@@ -21,14 +21,46 @@ import { Selected } from '@components/Selected'
 import { SliderGallery } from '@components/Slider'
 import { Space } from '@components/Space'
 
+import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+// Define the form data props type locally
+type FormDataProps = {
+  email: string;
+  password: string;
+}
+
+const signInSchema = yup.object({
+  email: yup.string().required('Informe o e-mail.').email('E-mail inválido.'),
+  password: yup
+    .string()
+    .required('Informe a senha.')
+    .min(6, 'A senha deve ter pelo menos seis dígitos.'),
+})
 
 export function SignIn() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(signInSchema),
+  })
+
   const [isActive, setIsActive] = useState(false)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   const handleChangeSwitch = () => {
     setIsActive(!isActive)
     console.log(isActive)
+  }
+
+  function handleSignin({
+    email,
+    password,
+  }: FormDataProps) {
+    console.log({email, password })
   }
 
 
@@ -39,9 +71,10 @@ export function SignIn() {
     >
       <VStack 
         flex={1} 
-        paddingBottom={40} 
+        paddingBottom={60}
+        paddingTop={60} 
         borderBottomRightRadius={40} 
-        borderBottomLeftRadius={40} 
+        borderBottomLeftRadius="$full"
         position='relative'
         zIndex={15}>
         <SmallContainer>
@@ -64,25 +97,46 @@ export function SignIn() {
           <Paragraph
             text="Acesse sua conta"
           />
+          <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="E-mail"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.email?.message}
 
-          <Input
-            placeholder="E-mail"
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="email-address"
-            returnKeyType="next"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  returnKeyType="next"
+                />
+              )}
           />
           <Space space={1} />
-          <Input
-            placeholder="Senha"
-            eye
-            secureTextEntry
-            returnKeyType="send"
+              <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Senha"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.password?.message}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  secureTextEntry
+                  returnKeyType="send"
+                />
+              )}
           />
+
           <Space space={1} />
           <Button
             title="Entrar"
-            onPress={() => navigation.navigate('signUp')}
+            onPress={handleSubmit(handleSignin)}
           />
 
         </SmallContainer>
@@ -90,24 +144,27 @@ export function SignIn() {
       </VStack>
       <VStack 
         backgroundColor='$white' 
-        height="$56" 
+        height="$32"
+        paddingLeft="$12"
+        paddingRight="$12"
         alignItems='center' 
         justifyContent='center' 
-        gap={4} 
+        gap="$2"
         zIndex={1}
         position='relative'
-        transform={[{ translateY: -40 }] }>
+>
           
-          <Paragraph
+        <Paragraph
             text="Ainda não tem acesso?"
           />
-          <SmallContainer>
+          
             <Button
               title="Criar uma conta"
               variant='gray'
               onPress={() => navigation.navigate('signUp')}
             />
-          </SmallContainer>
+          
+
       </VStack>
     </ScrollView>
   )
